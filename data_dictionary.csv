@@ -1,0 +1,8 @@
+column_name,data_type,nullable,description
+timestamp,datetime (YYYY-MM-DD HH:MM:SS),No,Transaction timestamp in ISO-like format (e.g., 2024-01-01 00:26:00). Time is continuous in this dataset (sorted ascending). Used for time-series ordering and time-based feature engineering.
+account_id,string (anon identifier),No,Anonymized account identifier (format ACC#####). Used to group transactions by account for per-account behavior features; no PII assumed.
+trans_amount,numeric (float),No,Transaction amount in the dataset's currency units (values observed 6.07 to 1471.92). Non-negative in observed data. Primary magnitude feature for anomaly detection.
+transaction_type,categorical (string),No,Type of transaction. Observed values: Credit, Debit, Transfer.
+merchant_category,categorical (string),No,Merchant/category context. Observed values: Electronics, Fuel, Grocery, Online, Restaurant, Travel.
+anomaly_score,numeric (float, 0-1),No,Pre-computed anomaly score present in dataset (observed range ~0.0043 to 0.9978). Mean ~0.519 overall; mean lower for is_anomaly==1 (0.349) in this sample. Provenance unknown (model output/heuristic/synthetic). Investigated only for understanding; NOT used as model input (to avoid leakage). Treated separately from ground truth.
+is_anomaly,binary (0 or 1),No,Label indicating anomalous transaction (0 = normal, 1 = anomaly). Only 3/500 (0.6%) are 1 in this dataset. Provenance unknown - cannot be assumed as verified ground truth without additional evidence. For evaluation purposes only if provenance supports it; with n=3 positives, metrics have extremely high variance. NOT used as model input (to avoid leakage).

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results - FinGuard AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-icon">F</div>
+                <div class="brand-text">
+                    <div class="brand-title">FinGuard AI</div>
+                    <div class="brand-subtitle">Anomaly Detection</div>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-link">
+                    <span class="nav-icon">▦</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/#run-detection" class="nav-link">
+                    <span class="nav-icon">▶</span>
+                    <span>Run Detection</span>
+                </a>
+                <a href="/download" class="nav-link">
+                    <span class="nav-icon">↓</span>
+                    <span>Download</span>
+                </a>
+                <a href="/" class="nav-link">
+                    <span class="nav-icon">📊</span>
+                    <span>Data Explorer</span>
+                </a>
+                <a href="/" class="nav-link">
+                    <span class="nav-icon">📈</span>
+                    <span>Visualizations</span>
+                </a>
+                <a href="#results" class="nav-link active">
+                    <span class="nav-icon">📋</span>
+                    <span>Results</span>
+                </a>
+                <a href="/" class="nav-link">
+                    <span class="nav-icon">ℹ</span>
+                    <span>About</span>
+                </a>
+            </nav>
+        </aside>
+
+        <div class="main-wrapper">
+            <header class="top-header">
+                <div class="header-spacer"></div>
+                <div class="header-info">
+                    <span class="header-item">Dataset: <strong>dataset.csv</strong></span>
+                    <span class="header-divider">|</span>
+                    <span class="header-item"><strong>{{ flagged + unflagged }}</strong> Transactions</span>
+                </div>
+            </header>
+
+            <main class="page-content">
+                <div class="page-header">
+                    <h1 class="page-title">Anomaly Detection Results</h1>
+                    <p class="page-subtitle">Isolation Forest predictions aligned with original transaction records</p>
+                </div>
+
+                <div class="notice-banner">
+                    <div class="notice-icon">⚠</div>
+                    <div class="notice-content">
+                        <strong>Important Notice:</strong> Unsupervised results with unverified labels. Only 3 positive labels exist. 
+                        No claim of FPR &lt; 0.1% or production reliability.
+                    </div>
+                </div>
+
+                <div class="metrics-row">
+                    <div class="metric-box">
+                        <div class="metric-number" style="color: #dc2626;">{{ flagged }}</div>
+                        <div class="metric-label">Flagged</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-number" style="color: #16a34a;">{{ unflagged }}</div>
+                        <div class="metric-label">Unflagged</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-number">{{ contamination }}</div>
+                        <div class="metric-label">Contamination</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-number">{{ flagged + unflagged }}</div>
+                        <div class="metric-label">Total Processed</div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <a href="/download" class="btn-primary">Download Results CSV</a>
+                    <a href="/" class="btn-secondary">Back to Dashboard</a>
+                </div>
+
+                <section class="card" id="results">
+                    <div class="card-header">
+                        <h2 class="card-title">Flagged Transactions</h2>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Account ID</th>
+                                    <th>Amount</th>
+                                    <th>Type</th>
+                                    <th>Category</th>
+                                    <th>Model Score</th>
+                                    <th>Status</th>
+                                    <th>Provided Label</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in results %}
+                                {% if row.predicted_flag == 1 %}
+                                <tr>
+                                    <td>{{ row.timestamp }}</td>
+                                    <td>{{ row.account_id }}</td>
+                                    <td>${{ "%.2f"|format(row.trans_amount|float) }}</td>
+                                    <td>{{ row.transaction_type }}</td>
+                                    <td>{{ row.merchant_category }}</td>
+                                    <td>{{ "%.4f"|format(row.anomaly_score_model|float) }}</td>
+                                    <td><span class="status-flagged">Flagged</span></td>
+                                    <td>{{ row.is_anomaly }} (unverified)</td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

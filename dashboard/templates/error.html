@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - FinGuard AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="app-layout">
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-icon">F</div>
+                <div class="brand-text">
+                    <div class="brand-title">FinGuard AI</div>
+                    <div class="brand-subtitle">Anomaly Detection</div>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/" class="nav-link">
+                    <span class="nav-icon">▦</span>
+                    <span>Dashboard</span>
+                </a>
+            </nav>
+        </aside>
+        <div class="main-wrapper">
+            <header class="top-header">
+                <div class="header-spacer"></div>
+            </header>
+            <main class="page-content">
+                <div class="page-header">
+                    <h1 class="page-title">Error</h1>
+                </div>
+                <section class="card">
+                    <div class="notice-banner" style="background-color: #fef2f2; border-color: #fecaca;">
+                        <div class="notice-icon">⚠</div>
+                        <div class="notice-content" style="color: #991b1b;">
+                            {{ error }}
+                        </div>
+                    </div>
+                    <a href="/" class="btn-primary">Back to Dashboard</a>
+                </section>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
